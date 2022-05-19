@@ -1,6 +1,9 @@
 from django.db import models
 
 # Create your models here.
+from django.db.models import Sum
+
+
 class Course(models.Model):
     cid=models.IntegerField(primary_key=True)
     mycourse=[('java','java'),('python','python'),('PHP','PHP')]
@@ -28,5 +31,16 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.stuid}-{self.stuname}{self.cid}'
 
+class Attendance(models.Model):
+    stuid=models.ForeignKey(Student,on_delete=models.CASCADE)
+    stid=models.ForeignKey(Staff,on_delete=models.CASCADE)
+    date=models.DateField()
+    myduration = [('2 hours', '2 hours'), ('3 hours', '3 hours'), ('6 hours', '6 hours')]
+    duration = models.CharField(choices=myduration, max_length=30)
 
+class Evaluation(models.Model):
+    stuid = models.ForeignKey(Student, on_delete=models.CASCADE)
+    stid = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    # totalduration=Attendance.objects.filter(stuid=stuid).aggregate(Sum(F'duration'))
+    examdate=models.DateField()
 
